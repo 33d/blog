@@ -18,9 +18,18 @@ body {
 
 h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: 400; }
 
-a         { color: #2a7ae2; text-decoration: none; }
-a:hover   { color: #000; text-decoration: underline; }
-a:visited { color: #205caa; }
+a {
+  color: #333; 
+  text-decoration: none;
+  border-bottom: 1px dotted;
+}
+a:hover { 
+  color: #333; 
+  background-color: #CCC;
+}
+a:visited { 
+  color: #666; 
+}
 
 /* Utility */
 
@@ -261,6 +270,14 @@ a:visited { color: #205caa; }
 }
 
 .post pre.terminal code { background-color: #333; }
+
+/* Other */
+/* ----------------------------------------------------------*/
+
+.rss-subscribe a {
+  background-color: #FFF;
+  border: none;
+}
 
 /* Syntax highlighting styles */
 /* ----------------------------------------------------------*/
