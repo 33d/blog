@@ -280,6 +280,11 @@ a:visited {
 
 .post pre.terminal code { background-color: #333; }
 
+.post .graphic {
+  float: left;
+  margin: 0 1em 0 0;
+}
+
 /* Other */
 /* ----------------------------------------------------------*/
 

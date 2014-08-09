@@ -9,6 +9,7 @@ layout: default
   </header>
 
   <article class="post-content">
+  {% if page.graphic %}<img class="graphic" src="{{ site.wp-images }}{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}/{{ page.graphic }}" />{% endif %}
   {{ content }}
   </article>
 
