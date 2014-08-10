@@ -4,8 +4,8 @@ layout: default
 <div class="post">
 
   <div class="post-nav">
-    <p class="post-nav-older">{% if page.previous %}<a href="{{ page.previous.url }}">{{ page.previous.title }}</a>{% endif %}</p>
-    <p class="post-nav-newer">{% if page.next %}<a href="{{ page.next.url }}">{{ page.next.title }}</a>{% endif %}</p>
+    <p class="post-nav-older">{% if page.previous %}<a href="{{ page.previous.url }}">{{ page.previous.title }}</a>{% else %}&nbsp;{% endif %}</p>
+    <p class="post-nav-newer">{% if page.next %}<a href="{{ page.next.url }}">{{ page.next.title }}</a>{% else %}&nbsp;{% endif %}</p>
     <a href="/">Home</a>
   </div>
 
