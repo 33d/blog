@@ -1,0 +1,174 @@
+---
+author: sourcegate
+comments: true
+date: 2013-06-06 13:00:19+00:00
+layout: post
+slug: '338'
+title: Implementing the virtual guestbook
+wordpress_id: 338
+---
+
+So how about implementing the virtual message board?  I'll try it in a virtual machine first.
+
+
+# The VM
+
+
+Create a new Virtualbox VM, give it 32MB of RAM, and get it to boot of [the x86 image](http://downloads.openwrt.org/attitude_adjustment/12.09/x86/generic/openwrt-x86-generic-combined-ext4.vdi).  Give it two network adapters: one on an "internal network" - this will represent the wireless network - and one set to NAT, this will be the ethernet port that we can log in with.  You can forward a port through the second adapter for telnet access, that way you can cut and paste stuff.  Start it up.
+
+
+# Cleaning up
+
+
+We don't need anything related to the GUI configuration, since it probably won't work when we're done.  Remove any packages starting with luci, then remove lua and uhttpd.  opkg doesn't seem to have the concept of an automatically installed package, so you'll need to remove dependent packages yourself.
+
+
+# Networking
+
+
+The "wireless" network needs a static IP address, because it needs to be the DNS and DHCP server for whatever connects.  The other network adapter is used to get to the internet, and needs connect to some other gateway instead.  I put this in `/etc/config/network`:
+
+    
+    config interface lan
+    	option ifname eth0
+    	option proto static
+    	option auto 1
+    	option ipaddr 192.168.199.1
+    	option netmask 255.255.255.0
+    
+    config interface wan
+    	option ifname eth1
+    	option proto dhcp
+    	option auto 1
+
+
+
+
+# The web user
+
+
+Add a user to run the web server as.  There doesn't seem to be a command to do this, so add this to `/etc/passwd`:
+
+    
+    www-data:*:99:99:daemon:/var:/bin/false
+
+
+
+
+# The web server
+
+
+Install Hiawatha.  It doesn't seem to come with a startup script, so stick this in `/etc/init.d/hiawatha`:
+
+    
+    #!/bin/sh /etc/rc.common
+    
+    START=98
+    
+    SERVICE_DAEMONIZE=1
+    SERVICE_WRITE_PID=1
+    SERVICE_PID_FILE=/var/run/hiawatha.pid
+    
+    start() {
+      mkdir -p /var/lib/hiawatha
+      mkdir -p /var/log/hiawatha
+      service_start /usr/sbin/hiawatha -d
+    }
+    
+    stop() {
+      service_stop /usr/sbin/hiawatha
+    }
+
+
+The OpenWRT init scripts are a bit unusual, but it keeps track of the process ID and things like that.
+
+Run `/etc/init.d/hiawatha enable` to make the script work.
+
+
+## Configuration
+
+
+Some basic Hiawatha configuration. These go in `/etc/hiawatha/hiawatha.conf`:
+
+<strike>I'd like to limit the size of POST messages, so nobody fills up the disk. Hiawatha has an option for this (this sets it to 4kB):
+
+    
+    MaxRequestSize=4
+
+</strike>_This doesn't work with the (rather dated) version of Hiawatha in OpenWRT_.
+It should run as our www-data user:
+
+    
+    ServerId = www-data
+
+
+Hiawatha needs to be told what to do when it sees a PHP file.  I'll use FastCGI so I can limit the maximum number of PHP processes that run at once:
+
+    
+    FastCGIserver {
+            FastCGIid = PHP5
+            ConnectTo = /tmp/guestbook-fastcgi
+            Extension = php
+            SessionTimeout = 30
+    }
+
+
+This describes how to handle the "php" extension, but it doesn't tell it to actually use it.  Note the "FastCGIid" line, this needs to go later in the file where the "default" site is configured - that is, where WebsiteRoot is.
+
+    
+    UseFastCGI = PHP5
+
+
+There will be more configuration later.
+
+
+# PHP
+
+
+Install php-fastcgi.  We'll need a socket for the web server to talk fastcgi to, so put this in `/etc/config/php5-fastcgi`:
+
+    
+    config php5-fastcgi
+            option enabled 1
+            option port /tmp/guestbook-fastcgi
+
+
+I'm sure `/tmp` isn't the place to put this but since `/tmp` is a ramdisk and is empty on each boot, this should be fine.
+
+I had to add this near the top of `/etc/init.d/php5-fastcgi` to stop it running as root:
+
+    
+    SERVICE_UID=99
+
+
+Also, to limit the number of connections that PHP handles at once, change the service_start line to look like this:
+
+    
+            PHP_FCGI_CHILDREN='4' \
+            PHP_FCGI_MAX_REQUESTS='50' \
+            service_start /usr/bin/php-fcgi -b $port
+
+
+Hopefully this means that if more than 4 clients connect, the others will have to wait until another request finishes.
+
+
+# dnsmasq
+
+
+I want to get clients to connect to some website - presumably their home page - to be redirected to the guestbook.  One way to do this is to change each name lookup to redirect to the router instead.
+
+It turns out that's not hard; this goes in `/etc/dnsmasq.conf`:
+
+    
+    address=/#/192.168.199.1
+
+
+This tells dnsmasq to resolve all adresses to the router.
+
+It's also probably bad to do this on the wired interface though, so this line should do this:
+
+    
+    interface=eth0
+
+
+(or whatever the wired interface is)
