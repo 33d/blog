@@ -285,6 +285,23 @@ a:visited {
   margin: 0 1em 0 0;
 }
 
+.post-nav {
+  padding-bottom: 4ex;
+  text-align: center;
+}
+
+.post-nav .post-nav-older {
+  width: 40%;
+  float: left;
+  text-align: left;
+}
+
+.post-nav .post-nav-newer {
+  width: 40%;
+  float: right;
+  text-align: right;
+}
+
 /* Other */
 /* ----------------------------------------------------------*/
 
