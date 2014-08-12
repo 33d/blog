@@ -71,7 +71,7 @@ The circuit would look something like this:
 
 
 
-[![AVR VGA example circuit](http://sourcegate.files.wordpress.com/2010/04/avr-vga.png?w=300)](http://sourcegate.files.wordpress.com/2010/04/avr-vga.png)
+{% wpimage block avr-vga.png %}
 
 
 

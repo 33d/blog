@@ -16,7 +16,7 @@ Here's the idea:
 
 
 
-[![](http://sourcegate.files.wordpress.com/2010/04/usbosc.png?w=300)](http://sourcegate.files.wordpress.com/2010/04/usbosc.png)  
+{% wpimage block usbosc.png %}  
 (The "WR" on the FIFO are the two write pins, not a read and a write pin.)
 
 

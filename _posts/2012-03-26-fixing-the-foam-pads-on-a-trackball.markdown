@@ -10,12 +10,12 @@ wordpress_id: 147
 
 Problem: the trackball scratches my graphics tablet!
 
-[![](http://sourcegate.files.wordpress.com/2012/03/trackball_scratches1.jpg)](http://sourcegate.files.wordpress.com/2012/03/trackball_scratches1.jpg)
+{% wpimage block trackball_scratches1.jpg %}
 
 Solution: foam crafty adhesive shapes.
 
-[![](http://sourcegate.files.wordpress.com/2012/03/trackball_shapes.jpg)](http://sourcegate.files.wordpress.com/2012/03/trackball_shapes.jpg)
+{% wpimage block trackball_shapes.jpg %}
 
 Fixed! It's a bit slippery, but I'll get used to it.
 
-[![](http://sourcegate.files.wordpress.com/2012/03/trackball_fixed.jpg)](http://sourcegate.files.wordpress.com/2012/03/trackball_fixed.jpg)
+{% wpimage block trackball_fixed.jpg %}

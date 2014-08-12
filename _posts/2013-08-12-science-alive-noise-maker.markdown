@@ -45,12 +45,12 @@ You'll need:
 
 Here's the schematic.  I chose to pair my oscillators so that one turns the other on and off, and connected their outputs with diodes.  You can connect all four together in a line, or connect all of the outputs using diodes.  I've shown  a resistor to pull the output down when the oscillators are all low, but the amplifier probably has enough resistance at its input for that.
 
-[![science-alive-noisemaker-schematic](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-schematic-l.jpg)](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-schematic.png)
+{% wpimage block science-alive-noisemaker-schematic-l.jpg %}
 
 It looks like this wired up on a breadboard:
 
-[![science-alive-noisemaker-breadboard](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-breadboard-l.jpg)](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-breadboard.png)Mine looks like this:
+{% wpimage block science-alive-noisemaker-breadboard-l.jpg %}Mine looks like this:
 
-[![science-alive-noisemaker-photo](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-photo.jpg?w=300)](http://sourcegate.files.wordpress.com/2013/08/science-alive-noisemaker-photo.jpg)
+{% wpimage block science-alive-noisemaker-photo.jpg %}
 
 You can also see [this video of it in action](http://tinypic.com/r/144a5vd/5).

@@ -56,7 +56,7 @@ So all we need to do is update the compare register one line early!
 
 What about the vertical sync lines, where there are two pulses?  That shouldn't be a problem; we simply consider them two separate lines in software, so the lines are numbered like this:
 
-[![](http://sourcegate.files.wordpress.com/2012/10/vinfo_vsync_big_modified.png)](http://sourcegate.files.wordpress.com/2012/10/vinfo_vsync_big_modified.png)
+{% wpimage block vinfo_vsync_big_modified.png %}
 
 This also shows that the maximum value will need to be changed in the same way.  In the reference manual, they call this value the "auto-reload" value, and it's kept in the TIMx_ARR register.  Section 17.4.1 suggests you can choose whether this is double-buffered or not.  We might as well use this feature since the compare register needs it.
 

@@ -25,7 +25,7 @@ uses exactly that component](http://www.botkin.org/dale/rs232_interface.htm).  T
 
 
 
-[![](http://sourcegate.files.wordpress.com/2010/03/test1.png?w=300)](http://sourcegate.files.wordpress.com/2010/03/test1.png)
+{% wpimage block test1.png %}
 
 It looks like it should work as advertised.  On a HIGH input from the microcontroller, the gate voltage will create a conducting channel within the FET, sending a low signal to the ADM211.  A LOW signal will turn off the FET, bringing the output to 5V through the pull-up resistor.
 
