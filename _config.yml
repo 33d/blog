@@ -12,5 +12,13 @@ markdown: kramdown
 permalink: pretty
 
 # Wordpress import
-wp-images: /images/wp/
+wp-images: /images/wp
+
+wpimage:
+  source: 
+  output: generated
+  presets:
+    block:
+      height: 300
+      width: 400
 

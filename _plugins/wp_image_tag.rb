@@ -97,7 +97,7 @@ module Jekyll
       end
 
       # Return the markup!
-      "<a class='content-image' href='#{image_path}/#{instance[:src]}'><img src=\"#{generated[:file]}\" #{html_attr_string} width='#{generated[:width]}' height='#{generated[:height]}'></a>"
+      "<div class='content-image'><a href='#{image_path}/#{instance[:src]}'><img src=\"#{generated[:file]}\" #{html_attr_string} width='#{generated[:width]}' height='#{generated[:height]}'></a></div>"
     end
 
     def generate_image(instance, site_source, site_dest, image_source, image_dest)
@@ -135,11 +135,17 @@ module Jekyll
       end
       gen_ratio = gen_width/gen_height
 
-      # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
-      if orig_width < gen_width || orig_height < gen_height
-        undersize = true
-        gen_width = if orig_ratio < gen_ratio then orig_width else orig_height * gen_ratio end
-        gen_height = if orig_ratio > gen_ratio then orig_height else orig_width/gen_ratio end
+      # Don't make images bigger
+      if orig_width < gen_width && orig_height < gen_height
+        gen_width = orig_width
+        gen_height = orig_height
+      elsif
+        # scale the image so it fits
+        if gen_ratio < orig_ratio
+          gen_height = gen_width / orig_ratio
+        elsif
+          gen_width = gen_height * orig_ratio
+        end
       end
 
       gen_name = "#{basename}-#{gen_width.round}x#{gen_height.round}-#{digest}#{ext}"
@@ -148,8 +154,6 @@ module Jekyll
 
       # Generate resized files
       unless File.exists?(gen_dest_file)
-
-        warn "Warning:".yellow + " #{instance[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
 
         #  If the destination directory doesn't exist, create it
         FileUtils.mkdir_p(gen_dest_dir) unless File.exist?(gen_dest_dir)

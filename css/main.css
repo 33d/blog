@@ -245,6 +245,18 @@ a:visited {
 .post-content ul,
 .post-content ol { padding-left: 20px; }
 
+.post-content .content-image {
+  text-align: center;
+}
+
+.post-content .content-image a {
+  border: 0;
+}
+
+.post-content .content-image img {
+  border: 1px solid black;
+}
+
 .post pre,
 .post code {
   border: 1px solid #d5d5e9;
