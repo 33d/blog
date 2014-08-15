@@ -3,7 +3,7 @@
   <script type="text/javascript">
     var DISQUSWIDGETS = {
       displayCount: function(data) {
-        var count = data.counts[0].comments;
+        var count = data.counts.length && data.counts[0].comments;
         document.getElementById("comment_count_link").innerHTML = "Show " + count + " comment" + (count == 1 ? "" : "s");
       }
     };
@@ -19,7 +19,7 @@
     };
 
     ( function() {
-        document.getElementById("comment_count").innerHTML = "<a id='comment_count_link' onclick='showComments();'>...</a>";
+        document.getElementById("comment_count").innerHTML = "<a id='comment_count_link' onclick='showComments();'>Show comments</a>";
 
         var s = document.createElement("script");
         var encoded_id = encodeURI("{{ page.id }}");
