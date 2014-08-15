@@ -19,7 +19,7 @@
     };
 
     ( function() {
-        document.getElementById("comment_count").innerHTML = "<a id='comment_count_link' onclick='showComments();'>...</a>";
+        document.getElementById("comment_count").innerHTML = "<a id='comment_count_link' onclick='showComments();'>Show comments</a>";
 
         var s = document.createElement("script");
         var encoded_id = encodeURI("{{ page.id }}");
