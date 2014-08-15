@@ -45,11 +45,11 @@ You'll need:
 
 Here's the schematic.  I chose to pair my oscillators so that one turns the other on and off, and connected their outputs with diodes.  You can connect all four together in a line, or connect all of the outputs using diodes.  I've shown  a resistor to pull the output down when the oscillators are all low, but the amplifier probably has enough resistance at its input for that.
 
-{% wpimage block science-alive-noisemaker-schematic-l.jpg %}
+{% wpimage block science-alive-noisemaker-schematic.png %}
 
 It looks like this wired up on a breadboard:
 
-{% wpimage block science-alive-noisemaker-breadboard-l.jpg %}Mine looks like this:
+{% wpimage block science-alive-noisemaker-breadboard.png %}Mine looks like this:
 
 {% wpimage block science-alive-noisemaker-photo.jpg %}
 
