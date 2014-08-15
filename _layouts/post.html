@@ -17,6 +17,9 @@ layout: default
   <article class="post-content">
   {% if page.graphic %}<img class="graphic" src="{{ site.wp-images }}{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}/{{ page.graphic }}" />{% endif %}
   {{ content }}
+
+  {% include disqus.html %}
+
   </article>
 
 </div>
