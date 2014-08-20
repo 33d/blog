@@ -9,7 +9,7 @@ github_username:  jekyll
 
 # Build settings
 markdown: kramdown
-permalink: pretty
+permalink: /posts/:year/:month/:day/:title/
 
 # Wordpress import
 wp-images: /images/wp
