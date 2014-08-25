@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Back up the flash of a Huawei Mediapad 7 Lite
+slug: huawei-mediapad-7-lite-backup
 ---
 
 I recently purchased a Huawei Mediapad 7 Lite 4GB very cheaply on clearance.  It’s based on a Rockchip RK2918, which there are tools for to read and write the flash directly.  Before I start trying to hack it, I should get a backup of what’s already on it.
