@@ -24,7 +24,7 @@ I like to use VMs when doing things which might put stuff all over the filesyste
 
         # cp -p /cdrom/casper/vmlinuz.efi /mnt/boot
 
-7.  We need to [edit <code>/etc/casper.conf</code> inside the initrd](https://wiki.ubuntu.com/CustomizeLiveInitrd):
+7.  We need to [edit <code>/etc/casper.conf</code> inside the initrd](https://wiki.ubuntu.com/CustomizeLiveInitrd) (*Edit*: You don't need to do this; see the end of the post):
 
         # cd /tmp
         # mkdir i
@@ -60,6 +60,7 @@ I like to use VMs when doing things which might put stuff all over the filesyste
 
 9.  Install extlinux:
 
+        # mkdir /mnt/boot/extlinux
         # extlinux -i /mnt/boot/extlinux
 
     Put this in `/mnt/boot/extlinux/extlinux.conf`:
@@ -70,10 +71,19 @@ I like to use VMs when doing things which might put stuff all over the filesyste
         KERNEL /boot/vmlinuz.efi
         APPEND boot=casper initrd=/boot/initrd.lz noprompt
 
-10. The hard disk is probably missing a master boot record.
+10. The hard disk is probably missing the master boot record code, so write that.
 
         # dd if=/usr/lib/syslinux/mbr.bin of=/dev/sda
 
 11. Unmount `/mnt` and reboot.
 
+*Edit:* It turns out you don't need to change `initrd.lz`.
+
+Instead, all of the options in `casper.conf` except `root_persistence` can be sp
+ecified on the kernel command line - simply add them (without the quotes) to `ex
+tlinux.conf`, like this:
+
+    APPEND boot=casper initrd=/boot/initrd.lz noprompt username=user hostname=host
+
+You also need to label your hard disk partition `casper-rw`.
 
