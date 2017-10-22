@@ -14,10 +14,10 @@ Next are 14 pairs of bytes, which is the channel value in little endian byte ord
 
 Finally a 2 byte checksum is sent.  It's in little endian byte order, it starts at 0xFFFF, from which every byte's value is subtracted except for the checksum.
 
-I've written [a library][my-library] to decode this data.  An Arduino could measure the time of the message start to improve detection of the message start.
+I've written [a library][my-library] to decode this data.  An Arduino could measure the time of the message start to improve detection of the message start.  One problem using an Arduino is that the board will interfere with programming - a resistor (maybe 10k) on the data line should help.
 
-ibus-blog: https://basejunction.wordpress.com/2015/08/23/en-flysky-i6-14-channels-part1/
-ibus-library: https://github.com/aanon4/FlySkyIBus
-my-library: https://github.com/33d/ibus-library
-my-receiver: https://www.banggood.com/818CH-Mini-Receiver-With-PPM-iBus-SBUS-Output-for-Flysky-i6-i6x-AFHDS-2A-Transmitter-p-1183313.html
+[ibus-blog]: https://basejunction.wordpress.com/2015/08/23/en-flysky-i6-14-channels-part1/
+[ibus-library]: https://github.com/aanon4/FlySkyIBus
+[my-library]: https://github.com/33d/ibus-library
+[my-receiver]: https://www.banggood.com/818CH-Mini-Receiver-With-PPM-iBus-SBUS-Output-for-Flysky-i6-i6x-AFHDS-2A-Transmitter-p-1183313.html
 
