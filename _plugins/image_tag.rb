@@ -21,7 +21,7 @@ require 'mini_magick'
 
 module Jekyll
 
-  class Image < Liquid::Tag
+  class WPImage < Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
       @markup = markup
@@ -35,6 +35,7 @@ module Jekyll
 
       # Gather settings
       site = context.registers[:site]
+      page = context.registers[:page]
       settings = site.config['image']
       markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<html_attr>[\s\S]+)?$/.match(render_markup)
       preset = settings['presets'][ markup[:preset] ]
@@ -65,6 +66,8 @@ module Jekyll
         { :src => markup[:image_src] }
       end
 
+      image_path = "#{site.config['images']['source']}/#{page['date'].strftime('%Y-%m-%d')}-#{page['slug']}/"
+
       # Process html attributes
       html_attr = if markup[:html_attr]
         Hash[ *markup[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten ]
@@ -88,13 +91,13 @@ module Jekyll
       raise "Image Tag can't find the \"#{markup[:preset]}\" preset. Check image: presets in _config.yml for a list of presets." unless preset || dim ||  markup[:preset].nil?
 
       # Generate resized images
-      generated_src = generate_image(instance, site.source, site.dest, settings['source'], settings['output'])
-      unless generated_src
+      generated = generate_image(instance, site.source, site.dest, image_path, settings['output'])
+      unless generated[:file]
         return
       end
 
       # Return the markup!
-      "<img src=\"#{generated_src}\" #{html_attr_string}>"
+      "<div class='content-image'><a href='#{image_path}/#{instance[:src]}'><img src=\"#{generated[:file]}\" #{html_attr_string} width='#{generated[:width]}' height='#{generated[:height]}'></a></div>"
     end
 
     def generate_image(instance, site_source, site_dest, image_source, image_dest)
@@ -132,11 +135,17 @@ module Jekyll
       end
       gen_ratio = gen_width/gen_height
 
-      # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
-      if orig_width < gen_width || orig_height < gen_height
-        undersize = true
-        gen_width = if orig_ratio < gen_ratio then orig_width else orig_height * gen_ratio end
-        gen_height = if orig_ratio > gen_ratio then orig_height else orig_width/gen_ratio end
+      # Don't make images bigger
+      if orig_width < gen_width && orig_height < gen_height
+        gen_width = orig_width
+        gen_height = orig_height
+      elsif
+        # scale the image so it fits
+        if gen_ratio < orig_ratio
+          gen_height = gen_width / orig_ratio
+        elsif
+          gen_width = gen_height * orig_ratio
+        end
       end
 
       gen_name = "#{basename}-#{gen_width.round}x#{gen_height.round}-#{digest}#{ext}"
@@ -146,13 +155,11 @@ module Jekyll
       # Generate resized files
       unless File.exists?(gen_dest_file)
 
-        warn "Warning:".yellow + " #{instance[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
-
         #  If the destination directory doesn't exist, create it
         FileUtils.mkdir_p(gen_dest_dir) unless File.exist?(gen_dest_dir)
 
         # Let people know their images are being generated
-        puts "Generating #{gen_name}"
+        puts "Generating #{gen_name} #{image_source_path}->#{gen_dest_file}"
 
         # Scale and crop
         image.combine_options do |i|
@@ -165,9 +172,13 @@ module Jekyll
       end
 
       # Return path relative to the site root for html
-      Pathname.new(File.join('/', image_dest, image_dir, gen_name)).cleanpath
+      {
+        :file => Pathname.new(File.join('/', image_dest, image_dir, gen_name)).cleanpath,
+        :width => gen_width.to_i,
+        :height => gen_height.to_i
+      }
     end
   end
 end
 
-Liquid::Template.register_tag('image', Jekyll::Image)
+Liquid::Template.register_tag('image', Jekyll::WPImage)
