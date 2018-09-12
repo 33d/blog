@@ -22,5 +22,13 @@ wpimage:
       height: 300
       width: 400
 
+image:
+  source: images
+  output: generated
+  presets:
+    block:
+      height: 300
+      width: 400
+
 disqus_shortname: dspblog
 
