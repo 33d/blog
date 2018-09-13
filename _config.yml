@@ -11,24 +11,14 @@ github_username:  jekyll
 markdown: kramdown
 permalink: /posts/:year/:month/:day/:title/
 
-# Wordpress import
-wp-images: /images/wp
-
-wpimage:
-  source: 
+responsive_image:
+  template: _includes/responsive-image.html
+  default_quality: 75
+  sizes:
+   - width: 400
   output: generated
-  presets:
-    block:
-      height: 300
-      width: 400
-
-image:
-  source: images
-  output: generated
-  presets:
-    block:
-      height: 300
-      width: 400
+  output_path_format: generated/%{width}-%{basename}
+  save_to_source: false
 
 disqus_shortname: dspblog
 

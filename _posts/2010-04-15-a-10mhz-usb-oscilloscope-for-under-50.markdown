@@ -16,7 +16,7 @@ Here's the idea:
 
 
 
-{% wpimage block usbosc.png %}  
+{% image wp: true path: usbosc.png %}  
 (The "WR" on the FIFO are the two write pins, not a read and a write pin.)
 
 

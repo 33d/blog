@@ -1,0 +1,14 @@
+{% assign smallest = resized | sort: 'width' | first %}
+{% assign largest = resized | sort: 'width' | last %}
+{% capture srcset %}
+{% for i in resized %}
+    /{{ i.path }} {{ i.width }}w,
+{% endfor %}
+{% endcapture %}
+
+<div class='content-image'>
+<a href='/{{ original.path }}'>
+<img src="/{{ smallest.path }}" alt="{{ alt }}" srcset="{{ srcset | strip_newlines }} /{{ path }} {{ original.width }}w" sizes="400px">
+</a>
+</div>
+

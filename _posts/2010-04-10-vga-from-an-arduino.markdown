@@ -71,7 +71,7 @@ The circuit would look something like this:
 
 
 
-{% wpimage block avr-vga.png %}
+{% image wp: true path: avr-vga.png %}
 
 
 

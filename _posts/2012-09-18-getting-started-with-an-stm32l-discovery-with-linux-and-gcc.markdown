@@ -20,7 +20,7 @@ tags:
 - tutorial
 ---
 
-{% wpimage block stm32l-discovery_board_small.jpg %}I've got the "hello world" working on my [STM32L Discovery](http://www.st.com/internet/evalboard/product/250990.jsp) board that I got about 8 months ago.  It's not even the canonical blinking light, but it counts up and you only know that it works by using a debugger!  [Another site](http://www.triplespark.net/elec/pdev/arm/stm32.html) gave me the basic idea, but I needed a few changes to get it working.
+{% image wp: true path: stm32l-discovery_board_small.jpg %}I've got the "hello world" working on my [STM32L Discovery](http://www.st.com/internet/evalboard/product/250990.jsp) board that I got about 8 months ago.  It's not even the canonical blinking light, but it counts up and you only know that it works by using a debugger!  [Another site](http://www.triplespark.net/elec/pdev/arm/stm32.html) gave me the basic idea, but I needed a few changes to get it working.
 
 
 

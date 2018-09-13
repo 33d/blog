@@ -21,7 +21,7 @@ I'm thinking of building a robot that suspends a whiteboard marker from two stri
 
 I was playing with some calculations for this robot, literally on the back of an envelope.  I need to calculate how long each string will be for a particular coordinate.
 
-{% wpimage block whiteboard-robot-maths-1.png %}
+{% image wp: true path: whiteboard-robot-maths-1.png %}
 
 Pythagoras' theorem gives:
 

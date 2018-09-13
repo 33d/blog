@@ -122,7 +122,7 @@ and finally I get some output! The timing looks right, but there's some strange 
 
 Another problem is that the waveform is the wrong way around! There seem to be two settings that affect this: the OC1M bits in CCMR1, which say whether the waveform is active when the counter is less than the compare register; the other specifies the polarity of the output. Maybe I only have to change one of these? It seems odd to have two registers which do mostly the same thing. I'll change the polarity in CC1P.
 
-{% wpimage block stm32_tv_hsync.jpg %}
+{% image wp: true path: stm32_tv_hsync.jpg %}
 
 That's looking better! I swapped CCER and OC1M around, and the output looked the same.
 

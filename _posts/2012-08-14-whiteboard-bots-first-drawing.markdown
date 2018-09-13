@@ -8,7 +8,7 @@ title: Whiteboard bot's first drawing
 wordpress_id: 181
 ---
 
-{% wpimage block whiteboard-bots-first-drawing.jpg %}Here's the first drawing from my whiteboard robot! It doesn't draw anything by itself because I must have messed up the maths, but I was able to operate it manually and draw some circles. The lines are wonky because the wall the board was attached to was shaking. I didn't get the pen to move in and out, to draw separate lines.
+{% image wp: true path: whiteboard-bots-first-drawing.jpg %}Here's the first drawing from my whiteboard robot! It doesn't draw anything by itself because I must have messed up the maths, but I was able to operate it manually and draw some circles. The lines are wonky because the wall the board was attached to was shaking. I didn't get the pen to move in and out, to draw separate lines.
 
 The robot suspends a whiteboard marker from two strings.  The strings are wrapped around pulleys.  The strings are wound onto spools, driven by motors connected via a serial link to a PC.  The PC interprets an SVG image, and calculates how much each motor needs to turn to draw each line segment.
 

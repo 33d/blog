@@ -20,11 +20,11 @@ I'll need a simple circuit to mix my video signals together. [The Arduino TV Out
 
 So which resistors will I need?  To produce a white signal, the sync and video lines will be high.  The equivalent circuit looks like this:
 
-{% wpimage block video-out-high-schematic.png %}(The 75Ω resistor is the resistance inside the TV).
+{% image wp: true path: video-out-high-schematic.png %}(The 75Ω resistor is the resistance inside the TV).
 
 To show a black signal, the sync line will be high, and the video line will be low, which looks like this:
 
-{% wpimage block video-out-low-schematic.png %}
+{% image wp: true path: video-out-low-schematic.png %}
 
 [Wikipedia gives the formula for a voltage divider](http://en.wikipedia.org/wiki/Voltage_divider#General_case), so the resistors in the first diagram can be calculated with this formula:
 

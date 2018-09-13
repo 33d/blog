@@ -6,7 +6,7 @@ slug: brushed-bustodephon-esc-schematic
 
 I tried drawing the schematic for the common "Bustophedon" electronic speed controllers (ESC) for brushed motors.
 
-{% image bustodephonschematic.png %}
+{% image path: bustodephonschematic.png %}
 
 The circuit is fairly straightforward to follow.  The zener diode based regulator for the receiver power is a bit surprising - I would have thought another regulator would have been cheap enough instead of several components.  I'm guessing the separate supply is to shield the microcontroller from the receiver, especially since it would be easy to supply power from another ESC.
 

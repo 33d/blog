@@ -21,13 +21,13 @@ My cheap kettle leaked.  You couldn't press the lever down when it wasn't on th
 The steam is collected by this hood, which sends it down the tube into the base.
 
 
-{% wpimage block kettle1.jpg %}
+{% image wp: true path: kettle1.jpg %}
 
 
 The steam then enters the base of the kettle through the hole at the bottom of this picture, where it's deflected onto this disk.
 
 
-{% wpimage block kettle2.jpg %}
+{% image wp: true path: kettle2.jpg %}
 
 
 The disk flexed when I pressed in the middle.  The part that sticks out pressed against the lever that switches the kettle on and off.  I guess that as the disk heats and expands, it flexes in the same way.
