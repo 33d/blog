@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 gem 'json'
-gem 'jekyll'
-gem 'mini_magick'
+gem 'jekyll', '< 5'
+gem 'jekyll-responsive-image'
 
