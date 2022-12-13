@@ -6,7 +6,7 @@ slug: 2022-advent-of-code
 
 I'm having a go at the [2022 Advent of Code](https://adventofcode.com/2022/). Here's how I solved the problems - the ones I could be bothered solving anyway.
 
-= [01](https://adventofcode.com/2022/day/1) =
+# [01](https://adventofcode.com/2022/day/1)
 
 Use this awk script to convert the data to a CSV, one row per elf:
 
@@ -17,7 +17,7 @@ Use this awk script to convert the data to a CSV, one row per elf:
 
 Load the result into a spreadsheet application, sum the rows, and sort the totals to get the answers.
 
-= [02](https://adventofcode.com/2022/day/2) =
+# [02](https://adventofcode.com/2022/day/2)
 
 The score depends only on the second character (X, Y or Z), and whether you win, lose or draw.  I went for Python this time.
 
@@ -58,7 +58,7 @@ print (functools.reduce(
 ))
 ```
 
-= [03](https://adventofcode.com/2022/day/3) =
+# [03](https://adventofcode.com/2022/day/3)
 
 Get the first half of the string, look for the first character in the second half in the first half
 
@@ -109,7 +109,7 @@ print(functools.reduce(
 ))
 ```
 
-= [04](https://adventofcode.com/2022/day/4) =
+# [04](https://adventofcode.com/2022/day/4)
 
 ```
 import sys
@@ -134,7 +134,7 @@ Part 2 is the same, with the return value:
            n[1] <= n[2] and n[0] >= n[3]
 ```
 
-= [05](https://adventofcode.com/2022/day/5) =
+# [05](https://adventofcode.com/2022/day/5)
 
 The stacks are represented by lists. The initial state is loaded into the start of each list, then manipulated at the end of the lists.
 
@@ -170,7 +170,7 @@ print("".join(s[-1] for s in stacks))
 
 For part two, remove the `reverse` line (which I did first, because I didn't read the instructions properly!)
 
-= [06](https://adventofcode.com/2022/day/6) =
+# [06](https://adventofcode.com/2022/day/6)
 
 Almost a one liner:
 
@@ -184,7 +184,7 @@ print(next(n for n in range(count, len(data)) if len(set(data[n-count:n])) == co
 
 Change count to 14 for the second step.
 
-= [07](https://adventofcode.com/2022/day/7) =
+# [07](https://adventofcode.com/2022/day/7)
 
 ```
 import sys
@@ -230,5 +230,201 @@ used = allsizes[-1]
 required = 30000000 - (70000000 - used)
 print(min(s for s in sizes(root) if s >= required))
 ```
+
+# [08](https://adventofcode.com/2022/day/8)
+
+Create iterators extending from each side of the grid.  Store the coordinates of seen trees in a set.
+
+```
+import sys
+
+grid = []
+
+for line in sys.stdin:
+  grid.append([int(n) for n in line if n.isdigit()])
+  
+visible = set()
+
+def look(iter):
+    highest = -1
+    for coord, value in iter:
+        if value > highest:
+            visible.add(coord)
+            highest = value
+
+for y, line in enumerate(grid):
+    look(((x, y), line[x]) for x in range(len(line) - 1))
+    look(((x, y), line[x]) for x in range(len(line) - 1, 0, -1))
+
+for x in range(len(grid[0]) - 1):
+    look(((x, y), grid[y][x]) for y in range(len(grid) - 1))
+    look(((x, y), grid[y][x]) for y in range(len(grid) - 1, 0, -1))
+
+print(len(visible))
+```
+
+# [09](https://adventofcode.com/2022/day/9)
+
+```
+import sys
+
+visited = set((0,0))
+
+head = (0, 0)
+tail = (0, 0)
+
+dirs = {
+  'U': lambda x: (x[0], x[1] - 1),
+  'D': lambda x: (x[0], x[1] + 1),
+  'L': lambda x: (x[0] - 1, x[1]),
+  'R': lambda x: (x[0] + 1, x[1]),
+}
+
+signum = lambda x: x < 0 and -1 or x > 0 and 1 or 0
+
+for line in sys.stdin:
+  direction, count = line.split()
+  dir_fn = dirs[direction]
+  
+  for n in range(int(count)):
+    head = dir_fn(head)
+    dx = head[0] - tail[0]
+    dy = head[1] - tail[1]
+    if abs(dx) > 1 or abs(dy) > 1:
+      tail = (tail[0]+signum(dx), tail[1]+signum(dy))
+      visited.add(tail)
+
+print(len(visited))
+```
+
+Apparently this is wrong. I took a guess and subtracted one, and that was right. It looks like I got the constructor call for `visited` wrong.
+
+The second part involves extending it to a rope of 10 elements:
+
+```
+import sys
+
+visited = set()
+visited.add((0,0))
+
+rope = [(0, 0)] * 10
+
+dirs = {
+  'U': lambda x: (x[0], x[1] - 1),
+  'D': lambda x: (x[0], x[1] + 1),
+  'L': lambda x: (x[0] - 1, x[1]),
+  'R': lambda x: (x[0] + 1, x[1]),
+}
+
+signum = lambda x: x < 0 and -1 or x > 0 and 1 or 0
+
+for line in sys.stdin:
+  direction, count = line.split()
+  dir_fn = dirs[direction]
+  
+  for n in range(int(count)):
+    rope[0] = dir_fn(rope[0])
+    for n in range(0,9):
+      a = rope[n]
+      b = rope[n+1]
+      dx = a[0] - b[0]
+      dy = a[1] - b[1]
+      if abs(dx) > 1 or abs(dy) > 1:
+        rope[n+1] = (b[0]+signum(dx), b[1]+signum(dy))
+    visited.add(rope[-1])
+
+print(len(visited))
+```
+
+# [10](https://adventofcode.com/2022/day/10)
+
+```
+import sys
+import unittest
+
+def run(lines):
+  x = 1
+  for line in lines:
+    if line.startswith("noop"):
+      yield x
+    elif line.startswith("addx "):
+      x = x + int(line[5:])
+      yield x
+      yield x
+
+class TestExecution(unittest.TestCase):
+  def test_example(self):
+    self.assertEqual([1, 4, 4, -1, -1], list(run(['noop', 'addx 3', 'addx -5'])))
+
+unittest.main(exit=False)
+
+# Subtract two from the index for the delay, one more because
+# it's 1 indexed
+print(sum(x * (c+3) for c, x in enumerate(run(sys.stdin)) if c in range(17, 221, 40)))
+```
+
+For the second part, change the last line to:
+
+```
+out = itertools.chain([1, 1], run(sys.stdin))
+for y in range(6):
+  for x in range(40):
+    val = next(out)
+    print((x >= val-1 and x <= val+1) and '#' or '.', end='')
+  print()
+```
+
+# [11](https://adventofcode.com/2022/day/11)
+
+This one was tough - there are plenty of chances to misread the problem and type the wrong data.
+
+```
+import sys
+
+class Monkey:
+  def __init__(self, num, items, op, divisor, testtrue, testfalse):
+    self.num = num
+    self.items = items
+    self.op = op
+    self.divisor = divisor
+    self.testtrue = testtrue
+    self.testfalse = testfalse
+    self.inspections = 0
+
+  def inspect(self, monkeys):
+    items = self.items
+    self.items = []
+    self.inspections = self.inspections + len(items)
+    for i in items:
+      w = self.op(i) // 3
+      if (w % self.divisor) == 0:
+        monkeys[self.testtrue].items.append(w)
+      else:
+        monkeys[self.testfalse].items.append(w)
+
+monkeys = [
+  Monkey(0, [83, 97, 95, 67], lambda x: x * 19, 17, 2, 7),
+  Monkey(1, [71, 70, 79, 88, 56, 70], lambda x: x + 2, 19, 7, 0),
+  Monkey(2, [98, 51, 51, 63, 80, 85, 84, 95], lambda x: x + 7, 7, 4, 3),
+  Monkey(3, [77, 90, 82, 80, 79], lambda x: x + 1, 11, 6, 4),
+  Monkey(4, [68], lambda x: x * 5, 13, 6, 5),
+  Monkey(5, [60, 94], lambda x: x + 5, 3, 1, 0),
+  Monkey(6, [81, 51, 85], lambda x: x * x, 5, 5, 1),
+  Monkey(7, [98, 81, 63, 65, 84, 71, 84], lambda x: x + 3, 2, 2, 3),
+]
+
+for x in range(20):
+  for monkey in monkeys:
+    monkey.inspect(monkeys)
+inspections = [m.inspections for m in monkeys]
+inspections.sort()
+print(inspections[-1] * inspections[-2])
+```
+
+Using this approach for part two doesnt work - the numbers get too big.
+
+# [12](https://adventofcode.com/2022/day/12)
+
+Looks interesting, it's essentially a maze solving algorithm.
 
 
