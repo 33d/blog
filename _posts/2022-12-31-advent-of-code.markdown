@@ -427,4 +427,80 @@ Using this approach for part two doesnt work - the numbers get too big.
 
 Looks interesting, it's essentially a maze solving algorithm.
 
+The algorithm would be something like:
+
+* Let "Set" be a class containing a coordinate and a direction.
+* Let there be a list of Setps.
+* The directions are, in sequence, up, right, down and left.
+* You can't go further if you hit an edge, hit a space too high, or a space in the list of steps.
+* While you can continue to move up:
+  * Add the next step up to the list of steps
+* Go the next direction, then continue the above step
+* If you can't move, remove one Step from the list of Steps, then continue testing the directions.
+* Continue until the end is reached.
+
+After working on this for a while, it was taking a really long time to run, so I added the places visited but rejected to another list, and didn't visit them again.  There was another problem: it can't account for a shorter way between two visited points.  Instead, work from the end to the start, and for each point, store the minimum steps required to reach it from the end.  Where a new minimum is set, re-evaluate all paths from that point, but there's no point visiting any spaces with a lower score. Thinking about these rules, instead of keeping a list of steps visited, when setting a new minimum, add that space to a list of spaces to be evaluated, and continue until this list is empty.
+ 
+```
+import sys
+
+movements = [
+  lambda pos: (pos[0], pos[1] - 1), # up
+  lambda pos: (pos[0] + 1, pos[1]), # right
+  lambda pos: (pos[0], pos[1] + 1), # down
+  lambda pos: (pos[0] - 1, pos[1]), # left
+]  
+
+class Terrain:
+    def __init__(self, data):
+        self.data = data
+        self.width = len(self.data[0])
+        self.height = len(self.data)
+        self.size = self.width * self.height
+
+    def __getitem__(self, pos):
+        return self.data[pos[1]][pos[0]]
+
+    def __setitem__(self, pos, val):
+        self.data[pos[1]][pos[0]] = val
+
+terrain = Terrain([
+    [(1000 if c == 'S' else 26 if c == 'E' else ord(c) - ord('a')) for c in line[:-1]]
+        for line in sys.stdin
+])
+scores = Terrain([
+  [None] * terrain.width for i in range(terrain.height)
+])
+
+# I can't be bothered extracting these from the input
+start = (0, 20)
+end = (137, 20)
+
+scores[end] = 0
+to_evaluate = [end]
+
+while len(to_evaluate):
+    curr = to_evaluate.pop()
+    score = scores[curr]
+    for movement in movements:
+        next = movement(curr)
+        if next[0] < 0 or next[0] >= terrain.width \
+                or next[1] < 0 or next[1] >= terrain.height:
+            continue
+        nextScore = scores[next]
+        if terrain[curr] > terrain[next] + 1:
+            # The step is too high
+            continue
+        if nextScore == None or nextScore > score + 1:
+            scores[next] = score + 1
+            to_evaluate.append(next)
+
+print(scores[start])
+``` 
+
+For part two, as this loop runs, keep track of the lowest score where the elevation is the lowest.
+
+# [16](https://adventofcode.com/2022/day/16)
+
+This feels similar to day 12.  Let class Valve have a flow rate, and a list of tunnels.  Walk the graph as in the map in day 12 until the 30 minutes have passed, then backtrack and continue.
 
