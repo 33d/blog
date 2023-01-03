@@ -504,3 +504,110 @@ For part two, as this loop runs, keep track of the lowest score where the elevat
 
 This feels similar to day 12.  Let class Valve have a flow rate, and a list of tunnels.  Walk the graph as in the map in day 12 until the 30 minutes have passed, then backtrack and continue.
 
+# [17](https://adventofcode.com/2022/day/17)
+
+This one took way longer than it should have, because the unit test for `hits` was inadequate!
+
+```
+import sys
+import itertools
+import unittest
+
+class Rock:
+    def __init__(self, data):
+        self.data = data
+        self.width = max(len(d) for d in data)
+        self.height = len(data)
+
+rocks = itertools.cycle([
+    # data is upside down
+    Rock([[True, True, True, True]]),
+    Rock([[False, True, False], [True, True, True], [False, True, False]]),
+    Rock([[True, True, True], [False, False, True], [False, False, True]]), 
+    Rock([[True], [True], [True], [True]]), 
+    Rock([[True, True], [True, True]])
+])
+
+class Chamber:
+    def __init__(self, rows = [], width = 7):
+        # The chamber, where the bottom is index 0, the next is 1 etc
+        self.rows = rows
+        self.width = width
+
+    # ypos is the height where rock[0] appears
+    def hits(self, rock, xpos, ypos):
+        if xpos < 0 or xpos > self.width - rock.width:
+            return True
+        for y in range(min(len(self.rows) - ypos, rock.height)):
+            if next((True for a, b in zip(self.rows[y + ypos][xpos:], rock.data[y]) if a & b), False):
+                return True
+        return False
+        
+    def place(self, rock, xpos, ypos):
+        self.rows += [[False] * self.width for n in range(self.height, ypos + rock.height)]
+        for y, data in enumerate(rock.data):
+            for x, val in enumerate(data):
+                row = self.rows[y + ypos]
+                row[xpos + x] = row[xpos + x] or val
+
+    @property
+    def height(self):
+        return len(self.rows)
+
+    def dump(self):
+        for n in range(len(self.rows) - 1, -1, -1):
+            print(''.join('#' if x else '.' for x in self.rows[n]))
+        print()
+
+class ChamberTestCase(unittest.TestCase):
+    def test_hits(self):
+        chamber = Chamber([[False, True, True, False]])
+        rock = Rock([[True, False], [True, False]])
+        self.assertTrue(chamber.hits(rock, 2, 0))
+        self.assertFalse(chamber.hits(rock, 0, 0))
+        # the rock is entirely outside the chamber
+        self.assertFalse(chamber.hits(rock, 1, 1))
+
+class ChamberPlaceTestCase(unittest.TestCase):
+    def setUp(self):
+        self.chamber = Chamber([
+            [True, False, True, False],
+            [True, False, False, False]
+        ], width = 4)
+
+    def test_place_over_existing(self):
+        self.chamber.place(Rock([[True, False], [False, True]]), 2, 0)
+        self.assertEqual(self.chamber.rows, [
+            [True, False, True, False], [True, False, False, True]
+        ])
+
+    def test_place_over_new_row(self):
+        self.chamber.place(Rock([[True, False], [False, True]]), 0, 1)
+        self.assertEqual(self.chamber.rows, [
+            [True, False, True, False],
+            [True, False, False, False],
+            [False, True, False, False]
+        ])
+
+unittest.main(exit=False)
+
+jets = itertools.cycle([
+    1 if c == '>' else -1 for c in sys.stdin.read() if c == '<' or c == '>'
+])
+
+chamber = Chamber()
+
+for n in range(2022):
+    rock = next(rocks)
+    x = 2
+    y = chamber.height + 3
+    while True:
+        newx = x + next(jets)
+        x = x if chamber.hits(rock, newx, y) else newx
+        if y == 0 or chamber.hits(rock, x, y - 1):
+            break
+        y = y - 1
+    chamber.place(rock, x, y)
+
+print(len(chamber.rows))
+```
